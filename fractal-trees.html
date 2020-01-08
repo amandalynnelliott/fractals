@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+	<script type="text/javascript" src="fractal-trees.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+	<style type="text/css">
+		:root {
+			--accent-color: #D1AA7B;
+			--main-color: #987A37;
+			--shadow-color: #43402F;
+			--green-color: #626C2E;
+		}
+
+		html,
+		body {
+			margin: 0px;
+			font-family: 'Titillium Web', sans-serif;
+		}
+
+		canvas {
+			display: block;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			pointer-events: none;
+		}
+
+		#wrapper {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			margin: 50px;
+			z-index: 1;
+		}
+
+		#slider,
+		#checkbox,
+		#branch-variety {
+			background: transparent;
+		}
+
+		label {
+			color: var(--accent-color);
+		}
+
+		input[type=range] {
+			height: 25px;
+			-webkit-appearance: none;
+			margin: 10px 0;
+		}
+
+		input[type=range]:focus {
+			outline: none;
+		}
+
+		input[type=range]::-webkit-slider-runnable-track {
+			height: 5px;
+			cursor: pointer;
+			animate: 0.2s;
+			box-shadow: 0px 0px 0px var(--shadow-color);
+			background: var(--main-color);
+			border-radius: 1px;
+			border: 0px solid var(--shadow-color);
+		}
+
+		input[type=range]::-webkit-slider-thumb {
+			box-shadow: 0px 0px 0px var(--shadow-color);
+			border: 1px solid var(--main-color);
+			height: 18px;
+			width: 18px;
+			border-radius: 25px;
+			background: var(--accent-color);
+			cursor: pointer;
+			-webkit-appearance: none;
+			margin-top: -7px;
+		}
+
+		input[type=range]:focus::-webkit-slider-runnable-track {
+			background: var(--main-color);
+		}
+
+		input[type=range]::-moz-range-track {
+			width: 100%;
+			height: 5px;
+			cursor: pointer;
+			animate: 0.2s;
+			box-shadow: 0px 0px 0px var(--shadow-color);
+			background: var(--main-color);
+			border-radius: 1px;
+			border: 0px solid var(--shadow-color);
+		}
+
+		input[type=range]::-moz-range-thumb {
+			box-shadow: 0px 0px 0px var(--shadow-color);
+			border: 1px solid var(--main-color);
+			height: 18px;
+			width: 18px;
+			border-radius: 25px;
+			background: var(--accent-color);
+			cursor: pointer;
+		}
+
+		input[type=range]::-ms-track {
+			width: 100%;
+			height: 5px;
+			cursor: pointer;
+			animate: 0.2s;
+			background: transparent;
+			border-color: transparent;
+			color: transparent;
+		}
+
+		input[type=range]::-ms-fill-lower {
+			background: var(--main-color);
+			border: 0px solid var(--shadow-color);
+			border-radius: 2px;
+			box-shadow: 0px 0px 0px var(--shadow-color);
+		}
+
+		input[type=range]::-ms-fill-upper {
+			background: var(--main-color);
+			border: 0px solid var(--shadow-color);
+			border-radius: 2px;
+			box-shadow: 0px 0px 0px var(--shadow-color);
+		}
+
+		input[type=range]::-ms-thumb {
+			margin-top: 1px;
+			box-shadow: 0px 0px 0px var(--shadow-color);
+			border: 1px solid var(--main-color);
+			height: 18px;
+			width: 18px;
+			border-radius: 25px;
+			background: var(--accent-color);
+			cursor: pointer;
+		}
+
+		input[type=range]:focus::-ms-fill-lower {
+			background: var(--main-color);
+		}
+
+		input[type=range]:focus::-ms-fill-upper {
+			background: var(--main-color);
+		}
+
+		.control {
+			font-family: arial;
+			display: block;
+			position: relative;
+			padding-left: 30px;
+			margin-bottom: 5px;
+			padding-top: 3px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		.control input {
+			position: absolute;
+			z-index: -1;
+			opacity: 0;
+		}
+
+		.control_indicator {
+			position: absolute;
+			top: 2px;
+			left: 0;
+			height: 16px;
+			width: 16px;
+			background: var(--accent-color);
+			border: 0px solid: var(--shadow-color);
+			border-radius: 0px;
+		}
+
+		.control:hover input~.control_indicator,
+		.control input:focus~.control_indicator {
+			background: #cccccc;
+		}
+
+		.control input:checked~.control_indicator {
+			background: var(--green-color);
+		}
+
+		.control:hover input:not([disabled]):checked~.control_indicator,
+		.control input:checked:focus~.control_indicator {
+			background: var(--main-color);
+		}
+
+		.control input:disabled~.control_indicator {
+			background: #e6e6e6;
+			opacity: 0.6;
+			pointer-events: none;
+		}
+
+		.control_indicator:after {
+			box-sizing: unset;
+			content: '';
+			position: absolute;
+			display: none;
+		}
+
+		.control input:checked~.control_indicator:after {
+			display: block;
+		}
+
+		.control-checkbox .control_indicator:after {
+			left: 6px;
+			top: 2px;
+			width: 3px;
+			height: 8px;
+			border: solid #ffffff;
+			border-width: 0 2px 2px 0;
+			transform: rotate(45deg);
+		}
+
+		.control-checkbox input:disabled~.control_indicator:after {
+			border-color: #7b7b7b;
+		}
+
+		.control-checkbox .control_indicator::before {
+			content: '';
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 4.5rem;
+			height: 4.5rem;
+			margin-left: -1.8rem;
+			margin-top: -1.8rem;
+			background: var(--green-color);
+			border-radius: 3rem;
+			opacity: 0.6;
+			z-index: 99999;
+			transform: scale(0);
+		}
+
+		@keyframes s-ripple {
+			0% {
+				transform: scale(0);
+			}
+
+			20% {
+				transform: scale(1);
+			}
+
+			100% {
+				opacity: 0;
+				transform: scale(1);
+			}
+		}
+
+		@keyframes s-ripple-dup {
+			0% {
+				transform: scale(0);
+			}
+
+			30% {
+				transform: scale(1);
+			}
+
+			60% {
+				transform: scale(1);
+			}
+
+			100% {
+				opacity: 0;
+				transform: scale(1);
+			}
+		}
+
+		.control-checkbox input+.control_indicator::before {
+			animation: s-ripple 250ms ease-out;
+		}
+
+		.control-checkbox input:checked+.control_indicator::before {
+			animation-name: s-ripple-dup;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div>
+			<input id="slider" type="range" min="0" max="10" value="0">
+		</div>
+		<div>
+			<label class="control control-checkbox" for="checkbox">
+				Vary Branch Angle
+				<input type="checkbox" id="checkbox" class="checkboxes">
+				<div class="control_indicator"></div>
+			</label>
+		</div>
+		<div>
+			<label class="control control-checkbox" for="branch-variety">
+				Vary Branch Length
+				<input type="checkbox" id="branch-variety" class="checkboxes">
+				<div class="control_indicator"></div>
+			</label>
+		</div>
+		<!-- <div class="checkboxes">
+			<input type="checkbox" value="None" id="checkboxes" name="check" />
+			<label for="checkboxes"></label>
+		</div> -->
+	</div>
+	<canvas id="canvas"></canvas>
+</body>
+
+</html>

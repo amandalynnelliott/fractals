@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script type="text/javascript" src="IFS-gen.js"></script>
+    <link rel="stylesheet" type="text/css" href="IFS-gen.css" media="screen" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <template id="rule-control">
+        <style>
+            @import url('IFS-gen.css');
+            @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+        </style>
+
+        <div id="rule">
+            <form>
+                <div class="panel-header">
+                    <div id="rule-number">Rule 1 </div>
+                    <div><i id="delete-button" class="fa fa-times" aria-hidden="true"></i></div>
+                </div>
+                <table>
+                    <tr>
+                        <td id="rotation-label">Rotation: </td>
+                    </tr>
+                    <tr>
+                        <td><input id="rotation" type="range" min="0" max="360" step="1" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td id="scale-x-label">Scale X: </td>
+                    </tr>
+                    <tr>
+                        <td><input id="scale-x" type="range" min="-5" max="5" step="0.01" value="1" /></td>
+                    </tr>
+                    <tr>
+                        <td id="scale-y-label">Scale Y: </td>
+                    </tr>
+                    <tr>
+                        <td><input id="scale-y" type="range" min="-5" max="5" step="0.01" value="1" /></td>
+                    </tr>
+                    <tr>
+                        <td id="translate-x-label">Translate X: </td>
+                    </tr>
+                    <tr>
+                        <td><input id="translate-x" type="range" min="-12" max="12" step="0.01" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td id="translate-y-label">Translate Y: </td>
+                    </tr>
+                    <tr>
+                        <td><input id="translate-y" type="range" min="0" max="12" step="0.01" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td id="weight-label">Weight: </td>
+                    </tr>
+                    <tr>
+                        <td><input id="weight" type="range" min="0" max="1" step="0.01" value="0.01" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </template>
+
+    <div id="controls">
+        <form>
+            <div class="panel-header">
+                <div>Controls </div>
+                <div><a id="hide" href="#">Hide</a></div>
+            </div>
+            <div id="controls-table">
+                <div id="control-buttons">
+                    <div><i id="toggle-button" class="fa fa-pause" aria-hidden="true"></i></div>
+                    <div><i id="restart-button" class="fa fa-refresh" aria-hidden="true"></i></div>
+                </div>
+                <div>
+                    <div><button type="button" id="add-rule" href="#">Add Rule</button></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <canvas id="canvas"></canvas>
+</body>
+
+</html>
